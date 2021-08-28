@@ -31,10 +31,9 @@ import os
 import typing
 from dataclasses import dataclass
 
-from .utils import diff, tidy_fn_call, to_dict, visualise
-
 from . import ex
 from .errors import BadArgumentError, TestError
+from .utils import diff, tidy_fn_call, to_dict, visualise
 
 logger = logging.getLogger("HUPUTS")
 
@@ -64,7 +63,7 @@ def calc_coverage(i: ex.Interacter):
     return uncovered
 
 
-def run(path: str, d: str = "."):
+def run(path: str, d: str = None, cwd: str = None):
     """
     Runs unit tests from a dir or file path.
 
@@ -73,17 +72,24 @@ def run(path: str, d: str = "."):
     path : str
         The path to the dir/file
     d : str, optional
-        The dir containing test scripts for coverage calculations, by default "."
+        The dir with the scripts for coverage calculations, by default cwd.
+    cwd : str, optional
+        The working directory to run the test scripts, by default cwd.
 
     Raises
     ------
     BadArgumentError
         The path is invalid
     """
+    _cwd = os.getcwd()
+    d = d or _cwd
+    cwd = cwd or _cwd
     if os.path.isfile(path):
+        if not path.endswith(".py"):
+            return
         i = ex.Interacter(d)
         print(f"Running {path}…")
-        l = i.test_out(path)
+        l = i.test_out(path, cwd)
         if l:
             print(l)
         # FIXME coverage system

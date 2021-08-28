@@ -208,12 +208,13 @@ class Interacter:
                 self.q()
                 return l
 
-    def test_out(self, path):
+    def test_out(self, path, cwd):
         self.p = Popen(
             [sys.executable, path],
             stderr=PIPE,
             close_fds=ON_POSIX,
             universal_newlines=True,
+            cwd=cwd
         )
         self.p.wait()
         print(end=self.p.stderr.read())

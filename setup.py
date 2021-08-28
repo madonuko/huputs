@@ -7,11 +7,13 @@ HERE = pathlib.Path(__file__).parent
 
 # The text of the README file
 README = (HERE / "README.md").read_text()
+REQUIRE = (HERE / "requirements.txt").read_text().splitlines()
+REQUIRE = [x.strip() for x in REQUIRE]
 
 # This call to setup() does all the work
 setup(
     name="huputs",
-    version="0.1.0",
+    version="0.1.1",
     description="Human-Understandable Python Unit Test System",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -27,4 +29,5 @@ setup(
         "Programming Language :: Python :: 3.9",
     ],
     packages=["huputs"],
+    install_requires=["colorama"]
 )
